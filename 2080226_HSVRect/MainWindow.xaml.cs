@@ -15,6 +15,8 @@ using System.Windows.Controls.Primitives;
 using System.IO;
 using MyHSV;
 
+//HSVのグラデーションの画像を作成して保存するアプリ作ってみた(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15392811.html
 
 namespace _2080226_HSVRect
 {
