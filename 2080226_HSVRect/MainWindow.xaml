@@ -1,0 +1,94 @@
+﻿<Window x:Class="_2080226_HSVRect.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_2080226_HSVRect"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="410" Width="560">
+  <Grid Margin="5">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="160"/>
+    </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Image Name="MyImage" UseLayoutRounding="True" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+    </ScrollViewer>
+    <StackPanel Grid.Column="1">
+      <StackPanel Orientation="Horizontal" Height="32" IsEnabled="{Binding ElementName=RadioButtonHue, Path=IsChecked}">
+        <TextBlock Text="色相(H):" VerticalAlignment="Center" Margin="4,0" Width="40"/>
+        <TextBox Name="TextBoxHue" Text="{Binding ElementName=ScrollBarHue, Path=Value, StringFormat=000}"
+                   Width="30"  TextAlignment="Right" VerticalContentAlignment="Center"/>
+        <ScrollBar Name="ScrollBarHue" SmallChange="1" LargeChange="1"
+                   Minimum="0" Maximum="360" RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <Button Name="ButtonHueAdd30" Content="+30" Margin="4,0,0,0"/>
+        <Button Name="ButtonHueSub30" Content="-30" Margin="4,0,0,0"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" Height="32" IsEnabled="{Binding ElementName=RadioButtonSaturaion, Path=IsChecked}">
+        <TextBlock Text="彩度(S):" VerticalAlignment="Center" Margin="4,0" Width="40"/>
+        <TextBox Name="TextBoxSaturation" Text="{Binding ElementName=ScrollBarSaturation, Path=Value, StringFormat=000}"
+                   Width="30"  TextAlignment="Right" VerticalContentAlignment="Center"/>
+        <ScrollBar Name="ScrollBarSaturation" SmallChange="1" LargeChange="1" Value="100"
+                   Minimum="0" Maximum="100" RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <Button Name="ButtonSaturationAdd" Content="+10" Margin="4,0,0,0"/>
+        <Button Name="ButtonSaturationSub" Content="-10" Margin="4,0,0,0"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" Height="32" IsEnabled="{Binding ElementName=RadioButtonValue, Path=IsChecked}">
+        <TextBlock Text="明度(V):" VerticalAlignment="Center" Margin="4,0" Width="40"/>
+        <TextBox Name="TextBoxValue" Text="{Binding ElementName=ScrollBarValue, Path=Value, StringFormat=000}"
+                   Width="30"  TextAlignment="Right" VerticalContentAlignment="Center"/>
+        <ScrollBar Name="ScrollBarValue" SmallChange="1" LargeChange="1" Value="100"
+                   Minimum="0" Maximum="100" RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <Button Name="ButtonValueAdd" Content="+10" Margin="4,0,0,0"/>
+        <Button Name="ButtonValueSub" Content="-10" Margin="4,0,0,0"/>
+      </StackPanel>
+      <RadioButton Name="RadioButtonHue" Content="Hue" IsChecked="True"/>
+      <RadioButton Name="RadioButtonSaturaion" Content="Saturation"/>
+      <RadioButton Name="RadioButtonValue" Content="Value"/>
+
+      <StackPanel Orientation="Horizontal" Height="32">
+        <TextBlock Text="横:" VerticalAlignment="Center" Margin="4,0" Width="15"/>
+        <TextBox Name="TextBoxSize" Text="{Binding ElementName=ScrollBarSizeWidth, Path=Value, StringFormat=000}"
+                   Width="30" TextAlignment="Right" VerticalContentAlignment="Center"/>
+        <ScrollBar Name="ScrollBarSizeWidth" SmallChange="1" LargeChange="1" Value="256"
+                   Minimum="1" Maximum="360" RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <Button Name="ButtonSizeWidth100" Content="100" Margin="4,0,0,0"/>
+        <Button Name="ButtonSizeWidth256" Content="256" Margin="4,0,0,0"/>
+        <Button Name="ButtonSizeWidth360" Content="360" Margin="4,0"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" Height="32">
+        <TextBlock Text="縦:" VerticalAlignment="Center" Margin="4,0" Width="15"/>
+        <TextBox Name="TextBoxSizeHeight" Text="{Binding ElementName=ScrollBarSizeHeight, Path=Value, StringFormat=000}"
+                   Width="30" TextAlignment="Right" VerticalContentAlignment="Center"/>
+        <ScrollBar Name="ScrollBarSizeHeight" SmallChange="1" LargeChange="1" Value="256"
+                   Minimum="1" Maximum="360" RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <Button Name="ButtonSizeHeight100" Content="100" Margin="4,0,0,0"/>
+        <Button Name="ButtonSizeHeight256" Content="256" Margin="4,0,0,0"/>
+        <Button Name="ButtonSizeHeight360" Content="360" Margin="4,0"/>
+
+      </StackPanel>
+      <ComboBox Name="ComboBoxSavePixelFormat"/>
+      <Button Name="ButtonSaveImage" Content="保存"/>
+    </StackPanel>
+  </Grid>
+</Window>
