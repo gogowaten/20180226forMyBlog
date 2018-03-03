@@ -53,6 +53,7 @@ namespace _2080226_HSVRect
             RadioButtonHue.Checked += RadioButtonHue_Checked;
             RadioButtonSaturaion.Checked += RadioButtonSaturaion_Checked;
             RadioButtonValue.Checked += RadioButtonValue_Checked;
+            RadioButtonGrayScale.Checked += RadioButtonGrayScale_Checked;
 
             TextBoxHue.GotFocus += TextBlock_GotFocus;
             TextBoxSize.GotFocus += TextBlock_GotFocus;
@@ -74,6 +75,7 @@ namespace _2080226_HSVRect
             DrawHue();
             ComboBoxInitialize();
         }
+
 
         private void TextBoxHue_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -110,6 +112,10 @@ namespace _2080226_HSVRect
             ComboBoxSavePixelFormat.Items.Add(PixelFormats.Pbgra32);
             ComboBoxSavePixelFormat.Items.Add(PixelFormats.Gray8);
             ComboBoxSavePixelFormat.SelectedIndex = 0;
+            var tt = new ToolTip();
+            tt.Content = "通常はBgr24で" + "\n" + "グレースケール画像はGray8がいいかも";
+            ComboBoxSavePixelFormat.ToolTip = tt;
+
         }
 
         private void DrawHue()
@@ -140,9 +146,20 @@ namespace _2080226_HSVRect
                     (float)(ScrollBarValue.Value / 100f));
             }
         }
+        private void DrawGrayScale()
+        {
+            if (RadioButtonGrayScale.IsChecked == true)
+            {
+                MyImage.Source = GetGrayScaleRect(
+                    (int)ScrollBarSizeWidth.Value,
+                    (int)ScrollBarSizeHeight.Value);
+            }
+        }
+
 
         #region イベント
 
+        private void RadioButtonGrayScale_Checked(object sender, RoutedEventArgs e) => DrawGrayScale();
 
         private void RadioButtonHue_Checked(object sender, RoutedEventArgs e) => DrawHue();
 
@@ -186,6 +203,7 @@ namespace _2080226_HSVRect
             DrawHue();
             DrawSaturation();
             DrawValue();
+            DrawGrayScale();
         }
 
         private void ButtonSaveImage_Click(object sender, RoutedEventArgs e)
@@ -206,7 +224,7 @@ namespace _2080226_HSVRect
             wb.CopyPixels(pixels, stride, 0);
             int p = 0;
             Color color;
-            //高さが1のときは明度を1fいに固定したいので特別
+            //高さが1のときは明度を1fに固定したいので特別
             if (height == 1)
             {
                 for (int x = 0; x < width; ++x)
@@ -280,7 +298,7 @@ namespace _2080226_HSVRect
                     {
                         p = y * stride + (x * 4);
                         color = HSV.HSV2Color(
-                            (x * 359f) / (width - 1f),                            
+                            (x * 359f) / (width - 1f),
                             y / (double)(height - 1f),
                             value);
                         pixels[p + 3] = 255;
@@ -294,8 +312,34 @@ namespace _2080226_HSVRect
             return wb;
         }
 
+        //グレースケール作成
+        private BitmapSource GetGrayScaleRect(int width, int height)
+        {
+            var wb = new WriteableBitmap(width, height, 96, 96, PixelFormats.Pbgra32, null);
+            int h = wb.PixelHeight;
+            int w = wb.PixelWidth;
+            int stride = wb.BackBufferStride;
+            byte[] pixels = new byte[h * stride];
+            wb.CopyPixels(pixels, stride, 0);
+            int p = 0;
+            byte gray;
+            for (int y = 0; y < height; ++y)
+            {
+                gray = (byte)((y / (height - 1f)) * 255f);
+                for (int x = 0; x < width; ++x)
+                {
+                    p = y * stride + (x * 4);
+                    pixels[p + 3] = 255;
+                    pixels[p + 2] = gray;
+                    pixels[p + 1] = gray;
+                    pixels[p + 0] = gray;
+                }
+            }
+            wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);
+            return wb;
+        }
 
-
+        //色相を指定
         private BitmapSource GetHueRect(double hue, int size)
         {
             var wb = new WriteableBitmap(size, size, 96, 96, PixelFormats.Pbgra32, null);

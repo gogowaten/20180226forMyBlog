@@ -54,16 +54,17 @@
         <Button Name="ButtonValueAdd" Content="+10" Margin="4,0,0,0"/>
         <Button Name="ButtonValueSub" Content="-10" Margin="4,0,0,0"/>
       </StackPanel>
-      <RadioButton Name="RadioButtonHue" Content="Hue" IsChecked="True"/>
-      <RadioButton Name="RadioButtonSaturaion" Content="Saturation"/>
-      <RadioButton Name="RadioButtonValue" Content="Value"/>
+      <RadioButton Name="RadioButtonHue" Content="色相" IsChecked="True"/>
+      <RadioButton Name="RadioButtonSaturaion" Content="彩度"/>
+      <RadioButton Name="RadioButtonValue" Content="明度"/>
+      <RadioButton Name="RadioButtonGrayScale" Content="グレースケール"/>
 
       <StackPanel Orientation="Horizontal" Height="32">
         <TextBlock Text="横:" VerticalAlignment="Center" Margin="4,0" Width="15"/>
         <TextBox Name="TextBoxSize" Text="{Binding ElementName=ScrollBarSizeWidth, Path=Value, StringFormat=000}"
                    Width="30" TextAlignment="Right" VerticalContentAlignment="Center"/>
         <ScrollBar Name="ScrollBarSizeWidth" SmallChange="1" LargeChange="1" Value="256"
-                   Minimum="1" Maximum="360" RenderTransformOrigin="0.5,0.5">
+                   Minimum="1" Maximum="361" RenderTransformOrigin="0.5,0.5">
           <ScrollBar.RenderTransform>
             <RotateTransform Angle="180"/>
           </ScrollBar.RenderTransform>
@@ -77,7 +78,7 @@
         <TextBox Name="TextBoxSizeHeight" Text="{Binding ElementName=ScrollBarSizeHeight, Path=Value, StringFormat=000}"
                    Width="30" TextAlignment="Right" VerticalContentAlignment="Center"/>
         <ScrollBar Name="ScrollBarSizeHeight" SmallChange="1" LargeChange="1" Value="256"
-                   Minimum="1" Maximum="360" RenderTransformOrigin="0.5,0.5">
+                   Minimum="1" Maximum="361" RenderTransformOrigin="0.5,0.5">
           <ScrollBar.RenderTransform>
             <RotateTransform Angle="180"/>
           </ScrollBar.RenderTransform>
