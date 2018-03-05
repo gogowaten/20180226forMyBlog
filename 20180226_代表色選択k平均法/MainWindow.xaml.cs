@@ -132,14 +132,14 @@ namespace _20180226_代表色選択k平均法
         //    int h = wb.PixelHeight;
         //    int w = wb.PixelWidth;
         //    int stride = wb.BackBufferStride;
-        //    byte[] pixles = new byte[h * stride];
-        //    wb.CopyPixels(pixles, stride, 0);
+        //    byte[] pixels = new byte[h * stride];
+        //    wb.CopyPixels(pixels, stride, 0);
         //    int p = 0;
         //    Color[] color = new Color[h * w];
         //    for (int i = 0; i < color.Length; ++i)
         //    {
         //        p = i * 4;
-        //        color[i] = Color.FromRgb(pixles[p + 2], pixles[p + 1], pixles[p]);
+        //        color[i] = Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]);
         //    }
         //    return color;
         //}
@@ -152,8 +152,8 @@ namespace _20180226_代表色選択k平均法
         //    int h = wb.PixelHeight;
         //    int w = wb.PixelWidth;
         //    int stride = wb.BackBufferStride;
-        //    byte[] pixles = new byte[h * stride];
-        //    wb.CopyPixels(pixles, stride, 0);
+        //    byte[] pixels = new byte[h * stride];
+        //    wb.CopyPixels(pixels, stride, 0);
 
         //    if (limit > w * h)
         //    {
@@ -169,7 +169,7 @@ namespace _20180226_代表色選択k平均法
         //        x = random.Next(w);
         //        y = random.Next(h);
         //        p = y * stride + (x * 4);
-        //        color[i] = Color.FromRgb(pixles[p + 2], pixles[p + 1], pixles[p]);
+        //        color[i] = Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]);
         //    }
         //    return color;
         //}
@@ -204,8 +204,8 @@ namespace _20180226_代表色選択k平均法
             int h = wb.PixelHeight;
             int w = wb.PixelWidth;
             int stride = wb.BackBufferStride;
-            byte[] pixles = new byte[h * stride];
-            wb.CopyPixels(pixles, stride, 0);
+            byte[] pixels = new byte[h * stride];
+            wb.CopyPixels(pixels, stride, 0);
             long p = 0;
             Color myColor;
             int pIndex;//パレットのインデックス
@@ -232,7 +232,7 @@ namespace _20180226_代表色選択k平均法
                     for (int x = 0; x < w; ++x)
                     {
                         p = y * stride + (x * 4);
-                        myColor = Color.FromRgb(pixles[p + 2], pixles[p + 1], pixles[p]);
+                        myColor = Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]);
                         pIndex = 0;
                         distance = GetColorDistance(myColor, palette[0]);
                         min = distance;
@@ -283,7 +283,7 @@ namespace _20180226_代表色選択k平均法
                 for (int x = 0; x < w; ++x)
                 {
                     p = y * stride + (x * 4);
-                    myColor = Color.FromRgb(pixles[p + 2], pixles[p + 1], pixles[p]);
+                    myColor = Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]);
                     min = GetColorDistance(myColor, palette[0]);
                     pIndex = 0;
                     for (int i = 0; i < palette.Length; ++i)
@@ -296,12 +296,12 @@ namespace _20180226_代表色選択k平均法
                         }
                     }
                     myColor = palette[pIndex];
-                    pixles[p + 2] = myColor.R;
-                    pixles[p + 1] = myColor.G;
-                    pixles[p] = myColor.B;
+                    pixels[p + 2] = myColor.R;
+                    pixels[p + 1] = myColor.G;
+                    pixels[p] = myColor.B;
                 }
             }
-            wb.WritePixels(new Int32Rect(0, 0, w, h), pixles, stride, 0);
+            wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);
             return wb;
         }
 
