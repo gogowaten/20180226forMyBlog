@@ -155,8 +155,7 @@ namespace _20180306_メディアンカット法でパレット作成して減色
                 MyWrapPanel.Children.Add(border);
             }
         }
-
-
+        
         private void Button2_Click(object sender, RoutedEventArgs e)
         {
             //パレットの色表示を初期化
@@ -312,7 +311,7 @@ public class Cube
     //ColorのリストからCube作成
     public Cube(List<Color> color)
     {
-        Color cColor = color[0];
+        //Color cColor = color[0];
         byte lR = 255, lG = 255, lB = 255, hR = 0, hG = 0, hB = 0;
         byte cR, cG, cB;
         ListColors = new List<Color>();
