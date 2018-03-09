@@ -1,0 +1,50 @@
+﻿<Window x:Class="_20180308_減色_メディアンカット法と誤差拡散.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180308_減色_メディアンカット法と誤差拡散"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="200"/>
+    </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Image Name="MyImage" UseLayoutRounding="True" Stretch="None"/>
+    </ScrollViewer>
+    <StackPanel Grid.Column="1">      
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="色数" VerticalAlignment="Center" Margin="4,0" FontSize="14"/>
+        <TextBox Name="NumericTextBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                 Text="{Binding ElementName=NumericScrollBar, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                 Width="40" FontSize="18"/>
+        <ScrollBar Name="NumericScrollBar" Value="3" Minimum="1" Maximum="256" SmallChange="1" LargeChange="1"
+                   RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <TextBlock Name="TextBlockUsedColorCount" Text="usedColorCount" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+      </StackPanel>
+      <Button Name="Button1" Content="ピクセル数が最大のCubeを優先分割"/>
+      <Button Name="Button2" Content="長辺が最大のCubeを優先分割"/>
+      <Button Name="ButtonGetImageColors" Content="画像から作成"/>
+      <WrapPanel Name="MyWrapPanel"/>
+      <!--<TextBlock Text="変換" HorizontalAlignment="Center" Margin="0,10,0,0"/>-->
+      <Button Name="ButtonReduceColor" Content="減色"/>
+      <Button Name="ButtonGosakakusanNoErrorStack" Content="誤差拡散"/>
+      <Button Name="ButtonGosakakusanNoErrorStackLimit0_255" Content="制限誤差拡散"/>
+      <Button Name="ButtonTest2" Content="制限誤差拡散2"/>
+      <Button Name="ButtonGosakakusan" Content="誤差拡散(誤差蓄積)"/>
+      <Button Name="ButtonGosakakusan3Limit0_255" Content="制限誤差拡散（誤差蓄積）"/>
+      <Button Name="ButtonTest1" Content="制限誤差拡散2（誤差蓄積）"/>
+      <Button Name="ButtonGosakakusan2" Content="誤差拡散2往復走査"/>
+      <Button Name="ButtonPixelFormatIndexed1" Content="PixelFormat.Indexed1"/>
+      <Button Name="ButtonPixelFormatIndexed2" Content="PixelFormat.Indexed2"/>
+      <Button Name="ButtonPixelFormatIndexed4" Content="PixelFormat.Indexed4"/>
+      <Button Name="ButtonOrigin" Content="元の画像に戻す"/>
+    </StackPanel>
+  </Grid>
+</Window>
