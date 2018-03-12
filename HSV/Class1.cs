@@ -83,6 +83,8 @@ namespace MyHSV
         }
 
 
+//        プログラミング 第6弾(プログラム ) - Color Model：色をプログラムするブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/pspevolution7/17682985.html
 
         /// <summary>
         /// Color(RGB)をHSV(円錐モデル)に変換、Hの値は0fから360f、SとVは0fから1f
