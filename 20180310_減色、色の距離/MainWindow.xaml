@@ -1,0 +1,118 @@
+﻿<Window x:Class="_20180310_減色_色の距離.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180310_減色_色の距離"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="400" Width="600">
+  <Grid Margin="0,30,0,0">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="80"/>
+    </Grid.ColumnDefinitions>
+    <StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="ランダム色" Width="60"/>
+        <WrapPanel Name="MyWrapPanel"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+      <Border Name="BorderBaseColor" Background="Red" Width="80" Height="18"/>
+        <TextBlock Name="TextBlockBaseColor" Text="text"/>
+      </StackPanel>
+      <DockPanel>        
+        <TextBlock Text="近い色" Margin="60,0,0,0" HorizontalAlignment="Left"/>
+        <TextBlock Text="遠い色" Margin="60,0,0,0" HorizontalAlignment="Right"/>
+      </DockPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="rgb" Width="60"/>
+        <WrapPanel Name="WrapPanelRGB"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="rgb2" Width="60"/>
+      <WrapPanel Name="WrapPanelRGB2"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV円柱Add" Width="60"/>
+        <WrapPanel Name="WrapPanelHSV"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV円錐Add" Width="60"/>
+        <WrapPanel Name="WrapPanelHSV円錐"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV円柱Euclid" Width="60"/>
+        <WrapPanel Name="WrapPanelHSVEuclid"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV円錐Euclid" Width="60"/>
+        <WrapPanel Name="WrapPanelHSV円錐Euclid"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV円柱Tri" Width="60"/>
+        <WrapPanel Name="WrapPanelHSVTri"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV円錐Tri" Width="60"/>
+        <WrapPanel Name="WrapPanelHSV円錐Tri"/>
+      </StackPanel>
+
+      <!--<StackPanel Orientation="Horizontal">
+        <TextBlock Text="HSV2" Width="60"/>
+        <WrapPanel Name="WrapPanelHSV2"/>
+      </StackPanel>-->
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="XYZ" Width="60"/>
+        <WrapPanel Name="WrapPanelXYZ"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="Lab" Width="60"/>
+        <WrapPanel Name="WrapPanelLab"/>
+      </StackPanel>
+
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="色相" Width="60"/>
+        <WrapPanel Name="WrapPanelHue"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="彩度" Width="60"/>
+        <WrapPanel Name="WrapPanelSaturation"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="明度" Width="60"/>
+        <WrapPanel Name="WrapPanelValue"/>
+      </StackPanel>
+
+    </StackPanel>
+    <!--<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Image Name="MyImage" UseLayoutRounding="True" Stretch="None"/>
+    </ScrollViewer>-->
+    <StackPanel Grid.Column="1">
+
+      <Button Name="Button1" Content="ランダム色"/>
+      
+      <Button Name="ButtonChangeColor" Content="基準色変更"/>
+      <Button Name="ButtonSort" Content="sort"/>
+
+      <!--<Button Name="Button1" Content="ピクセル数が最大のCubeを優先分割"/>
+      <Button Name="Button2" Content="長辺が最大のCubeを優先分割"/>
+      <Button Name="ButtonGetImageColors" Content="画像から作成"/>
+      -->
+      <!--<TextBlock Text="変換" HorizontalAlignment="Center" Margin="0,10,0,0"/>-->
+      <!--
+      <Button Name="ButtonReduceColor" Content="減色"/>
+      <Button Name="ButtonReduceColor2" Content="減色2"/>
+      <Button Name="ButtonGosakakusanNoErrorStack" Content="誤差拡散"/>
+      <Button Name="ButtonGosakakusanNoErrorStackLimit0_255" Content="制限誤差拡散"/>
+      <Button Name="ButtonTest2" Content="制限誤差拡散2"/>
+      <Button Name="ButtonGosakakusan" Content="誤差拡散(誤差蓄積)"/>
+      <Button Name="ButtonGosakakusan3Limit0_255" Content="制限誤差拡散（誤差蓄積）"/>
+      <Button Name="ButtonTest1" Content="制限誤差拡散2（誤差蓄積）"/>
+      <Button Name="ButtonGosakakusan2" Content="誤差拡散2往復走査"/>
+      <Button Name="ButtonPixelFormatIndexed1" Content="PixelFormat.Indexed1"/>
+      <Button Name="ButtonPixelFormatIndexed2" Content="PixelFormat.Indexed2"/>
+      <Button Name="ButtonPixelFormatIndexed4" Content="PixelFormat.Indexed4"/>
+      <Button Name="ButtonOrigin" Content="元の画像に戻す"/>-->
+    </StackPanel>
+  </Grid>
+</Window>
