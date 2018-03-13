@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Diagnostics;
+//手抜きで時間を短縮、k平均法を使った減色パレットの作成(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15410540.html
 
 namespace _201803012_パレット作成速度
 {
