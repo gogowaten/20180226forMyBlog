@@ -6,16 +6,20 @@
         xmlns:local="clr-namespace:_201803012_パレット作成速度"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="570">
-  <Grid Margin="0,30,0,0">
+  <Grid Margin="0,20,0,0">
    
     <DockPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <Button Name="ButtonOriginImage" Content="元の画像に戻す" Width="100"/>
+      <Button Name="ButtonSaveImage" Content="画像保存" Width="100" Margin="10,0"/>
+      </StackPanel>
       <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
         <StackPanel Orientation="Horizontal">
           <TextBlock Text="色数" VerticalAlignment="Center" Margin="4,0" FontSize="18"/>
           <TextBox Name="NumericTextBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
                  Text="{Binding ElementName=NumericScrollBar, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                  Width="38" FontSize="18"/>
-          <ScrollBar Name="NumericScrollBar" Value="3" Minimum="1" Maximum="256" SmallChange="1" LargeChange="1"
+          <ScrollBar Name="NumericScrollBar" Value="4" Minimum="1" Maximum="256" SmallChange="1" LargeChange="1"
                    RenderTransformOrigin="0.5,0.5">
             <ScrollBar.RenderTransform>
               <RotateTransform Angle="180"/>
@@ -39,7 +43,7 @@
           <TextBox Name="NumericTextBox2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
                  Text="{Binding ElementName=NumericScrollBar2, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                  Width="70" FontSize="18"/>
-          <ScrollBar Name="NumericScrollBar2" Value="50000" Minimum="100" Maximum="1000000" SmallChange="100" LargeChange="10000"
+          <ScrollBar Name="NumericScrollBar2" Value="10000" Minimum="1000" Maximum="1000000" SmallChange="1000" LargeChange="10000"
                    RenderTransformOrigin="0.5,0.5">
             <ScrollBar.RenderTransform>
               <RotateTransform Angle="180"/>
@@ -69,7 +73,7 @@
         <TextBlock Name="TextBlockTimePixelLimit" Text="パレット作成時間" DockPanel.Dock="Top" Foreground="Red"/>
       <TextBlock Name="TextBlockTimeRiduceColor" Text="減色変換時間" Margin="10,0"/>
       </StackPanel>
-
+      
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <Image Name="MyImage" UseLayoutRounding="True" Stretch="None"/>
       </ScrollViewer>

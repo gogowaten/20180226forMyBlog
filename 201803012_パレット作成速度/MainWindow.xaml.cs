@@ -39,12 +39,26 @@ namespace _201803012_パレット作成速度
             ButtonChangeColorLimited.Click += ButtonChangeColorLimitedPixelPalette_Click;
             ButtonCreatePalette.Click += ButtonCreatePalette_Click;
             ButtonCreatePaletteWithLimit.Click += ButtonCreatePaletteWithLimit_Click;
+            ButtonSaveImage.Click += ButtonSaveImage_Click;
+            ButtonOriginImage.Click += ButtonOriginImage_Click;
             //ButtonGetColor.Click += ButtonGetColor_Click;
 
             //パレットの色表示用のBorder作成
             MyPalettePan = AddBorders(MyWrapPanel);
             MyPalettePanLimited = AddBorders(MyWrapPanelLimited);
 
+        }
+
+        private void ButtonOriginImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (OriginBitmap == null) { return; }
+            MyImage.Source = OriginBitmap;
+        }
+
+        private void ButtonSaveImage_Click(object sender, RoutedEventArgs e)
+        {
+            if (OriginBitmap == null) { return; }
+            SaveImage((BitmapSource)MyImage.Source);
         }
 
 
@@ -570,7 +584,30 @@ namespace _201803012_パレット作成速度
                 }
             }
             wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);
-            return wb;
+            int colorCount = palette.Count;
+            PixelFormat pixelFormat;
+            if (colorCount <= 2)
+            {
+                pixelFormat = PixelFormats.Indexed1;
+            }
+            else if (colorCount <= 4)
+            {
+                pixelFormat = PixelFormats.Indexed2;
+            }
+            else if (colorCount <= 16)
+            {
+                pixelFormat = PixelFormats.Indexed4;
+            }
+            else if (colorCount <= 256)
+            {
+                pixelFormat = PixelFormats.Indexed8;
+            }
+            else
+            {
+                pixelFormat = PixelFormats.Bgr24;
+            }
+            return new FormatConvertedBitmap(wb, pixelFormat, null, 0);
+
         }
 
         //距離
@@ -623,8 +660,36 @@ namespace _201803012_パレット作成速度
             return palettePan;
         }
 
+        private void SaveImage(BitmapSource source)
+        {
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            saveFileDialog.Filter = "*.png|*.png|*.bmp|*.bmp|*.tiff|*.tiff";
+            saveFileDialog.AddExtension = true;
+            saveFileDialog.FileName = System.IO.Path.GetFileNameWithoutExtension(ImageFileFullPath) + "_";
+            saveFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(ImageFileFullPath);
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                BitmapEncoder encoder = new BmpBitmapEncoder();
+                if (saveFileDialog.FilterIndex == 1)
+                {
+                    encoder = new PngBitmapEncoder();
+                }
+                else if (saveFileDialog.FilterIndex == 2)
+                {
+                    encoder = new BmpBitmapEncoder();
+                }
+                else if (saveFileDialog.FilterIndex == 3)
+                {
+                    encoder = new TiffBitmapEncoder();
+                }
+                encoder.Frames.Add(BitmapFrame.Create(source));
 
-
+                using (var fs = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.Write))
+                {
+                    encoder.Save(fs);
+                }
+            }
+        }
 
         private void MainWindow_Drop(object sender, DragEventArgs e)
         {
