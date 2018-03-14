@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
+//減色変換一覧表を使って処理時間を短縮してみた(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15412874.html
 
 namespace _20180314_k平均法減色変換時間_変換一覧表
 {
