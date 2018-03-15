@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+//Parallelクラスを使ってもっと速く減色(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15413665.html
 
 namespace _20180315_Parallelで減色変換を並列処理
 {
