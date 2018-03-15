@@ -1,0 +1,106 @@
+﻿<Window x:Class="_20180315_Parallelで減色変換を並列処理.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180315_Parallelで減色変換を並列処理"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+  <Window.Resources>
+    <Style TargetType="Button">
+      <Setter Property="Margin" Value="4,0,0,0"/>
+    </Style>
+  </Window.Resources>
+
+  <Grid Margin="0,20,0,0">
+    <DockPanel>
+      <TextBlock Name="TextBlockImageSize" Text="imageSize" Margin="10,0" DockPanel.Dock="Top"/>
+
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <Button Name="ButtonOriginImage" Content="元の画像に戻す" Width="100"/>
+        <Button Name="ButtonSaveImage" Content="画像保存" Width="100" Margin="10,0"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Text="色数" VerticalAlignment="Center" Margin="4,0" FontSize="16"/>
+          <TextBox Name="NumericTextBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                 Text="{Binding ElementName=NumericScrollBar, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                 Width="38" FontSize="18"/>
+          <ScrollBar Name="NumericScrollBar" Value="4" Minimum="1" Maximum="256" SmallChange="1" LargeChange="1"
+                   RenderTransformOrigin="0.5,0.5">
+            <ScrollBar.RenderTransform>
+              <RotateTransform Angle="180"/>
+            </ScrollBar.RenderTransform>
+          </ScrollBar>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Text="遊び" VerticalAlignment="Center" Margin="8,0,4,0" FontSize="16"/>
+          <TextBox Name="NumericTextBoxMargin" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                 Text="{Binding ElementName=NumericScrollBarMargin, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                 Width="38" FontSize="18"/>
+          <ScrollBar Name="NumericScrollBarMargin" Value="3" Minimum="1" Maximum="256" SmallChange="1" LargeChange="1"
+                   RenderTransformOrigin="0.5,0.5">
+            <ScrollBar.RenderTransform>
+              <RotateTransform Angle="180"/>
+            </ScrollBar.RenderTransform>
+          </ScrollBar>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+          <TextBlock Text="ピクセル数制限" VerticalAlignment="Center" Margin="4,0" FontSize="16"/>
+          <TextBox Name="NumericTextBox2" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                 Text="{Binding ElementName=NumericScrollBar2, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                 Width="70" FontSize="18"/>
+          <ScrollBar Name="NumericScrollBar2" Value="10000" Minimum="1000" Maximum="1000000" SmallChange="1000" LargeChange="10000"
+                   RenderTransformOrigin="0.5,0.5">
+            <ScrollBar.RenderTransform>
+              <RotateTransform Angle="180"/>
+            </ScrollBar.RenderTransform>
+          </ScrollBar>
+        </StackPanel>
+        <TextBlock Name="TextBlockImagePixelsCount" Text="pixelsCount" FontSize="16" VerticalAlignment="Center"/>
+      </StackPanel>
+      <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <TextBlock Text="全ピクセル" Width="70" TextAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Name="TextBlockLoopCount" Text="loop count" Margin="0,0,10,0"/>
+        <TextBlock Name="TextBlockTimePixelNoLimit" Text="パレット作成時間" DockPanel.Dock="Top" Foreground="Red"/>
+      </StackPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <Button Name="ButtonCreatePalette" Content="作成"/>
+        <Button Name="ButtonChangeColor" Content="変換" Margin="4,0,4,0"/>
+        <WrapPanel Name="MyWrapPanel"/>
+      </StackPanel>-->
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <Button Name="ButtonCreatePaletteWithLimit" Content="作成"/>
+        <WrapPanel Name="MyWrapPanelLimited"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <TextBlock Name="TextBlockLoopCountLimited" Text="loop count" Margin="0,0,10,0"/>
+        <TextBlock Name="TextBlockTimePixelLimit" Text="パレット作成時間" DockPanel.Dock="Top"/>
+      </StackPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <Button Name="ButtonChangeColorLimited" Content="変換1"/>
+        <Button Name="ButtonReduceColor2" Content="変換2"/>
+        <Button Name="ButtonReduceColor3" Content="変換3"/>
+        <Button Name="ButtonReduceColor4" Content="変換4"/>
+        <Button Name="ButtonReduceColor5" Content="変換5"/>
+        <Button Name="ButtonReduceColor6" Content="変換6"/>
+        <Button Name="ButtonReduceColor7" Content="変換7"/>
+        <Button Name="ButtonReduceColor8" Content="変換8"/>
+        <Button Name="ButtonReduceColor9" Content="変換9"/>
+        <Button Name="ButtonReduceColor10" Content="変換10"/>
+        <Button Name="ButtonReduceColor11" Content="変換11"/>
+        <!--<Button Name="ButtonReduceColor10_2" Content="変換10-2"/>-->
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <!--<TextBlock Text="制限ピクセル" Width="70" TextAlignment="Center" VerticalAlignment="Center"/>-->
+        <TextBlock Name="TextBlockTimeRiduceColor" Text="減色変換時間" Margin="10,0" Foreground="Red"/>
+        <TextBlock Name="TextBlockWhich" Text="変換n"/>
+      </StackPanel>
+
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Image Name="MyImage" UseLayoutRounding="True" Stretch="None"/>
+      </ScrollViewer>
+    </DockPanel>
+
+  </Grid>
+</Window>
