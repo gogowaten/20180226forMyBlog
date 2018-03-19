@@ -23,7 +23,7 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
     public partial class MainWindow : Window
     {
         BitmapSource OriginBitmap;
-        string ImageFileFullPath;        
+        string ImageFileFullPath;
         Border[] MyPalettePanLimited;
         const int MAX_PALETTE_COLOR_COUNT = 20;
 
@@ -33,23 +33,35 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
             this.Title = this.ToString() + "k平均法で減色パレットの作成";
             this.AllowDrop = true;
             this.Drop += MainWindow_Drop;
-            
+
             ButtonChangeColorLimited.Click += ButtonChangeColorLimitedPixelPalette_Click;
             ButtonReduceColor2.Click += ButtonReduceColor2_Click;
+            ButtonReduceColor3.Click += ButtonReduceColor3_Click;
             ButtonCreatePaletteWithLimit.Click += ButtonCreatePaletteWithLimit_Click;
             ButtonSaveImage.Click += ButtonSaveImage_Click;
-            ButtonOriginImage.Click += ButtonOriginImage_Click;            
+            ButtonOriginImage.Click += ButtonOriginImage_Click;
 
             //パレットの色表示用のBorder作成            
             MyPalettePanLimited = AddBorders(MyWrapPanelLimited);
 
         }
 
+        private void ButtonReduceColor3_Click(object sender, RoutedEventArgs e)
+        {
+            if (OriginBitmap == null || MyPalettePanLimited[0].Background == null) { return; }
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            MyImage.Source = ReduceColor2_2(OriginBitmap, GetPaletteColorList(MyPalettePanLimited));
+            stopwatch.Stop();
+            ReNewTextTime(stopwatch.Elapsed, TextBlockTimeRiduceColor, "変換");
+            ReNewTextWhichButton((Button)sender);
+        }
+
         private void ReNewTextWhichButton(Button button)
         {
             TextBlockWhich.Text = button.Content.ToString();
         }
-       
+
 
         //Parallelテスト
         private void ButtonReduceColor2_Click(object sender, RoutedEventArgs e)
@@ -340,6 +352,7 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
                     pixels[p + 2] = bitmapColor.R;
                     pixels[p + 1] = bitmapColor.G;
                     pixels[p + 0] = bitmapColor.B;
+                    pixels[p + 3] = 255;//アルファは完全不透明にする
                 }
             }
             wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);
@@ -347,7 +360,7 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
             //PixelFormatを色数に合わせたものに変更してから返す            
             return OptimisationPixelFormat(wb, palette.Count);
         }
-        
+
         //パレットの色で減色2、変換一覧表を使った方法        
         private BitmapSource ReduceColor2(BitmapSource source, List<Color> palette)
         {
@@ -362,6 +375,43 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
             int[] colorCountArray = GetArray24bitColorCount(source);
             //変換一覧表取得
             Dictionary<Color, Color> converter = GetDictionaryConvertColor(colorCountArray, palette);
+            //Dictionary<Color, Color> converter = GetDictionaryConvertColor2(colorCountArray, palette);
+            
+            for (int y = 0; y < h; ++y)//この中が一番時間がかかる
+            {
+                for (int x = 0; x < w; ++x)
+                {
+                    p = y * stride + (x * 4);
+                    bitmapColor = Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]);
+                    //変換一覧表を使って色変換
+                    bitmapColor = converter[bitmapColor];
+                    pixels[p + 2] = bitmapColor.R;
+                    pixels[p + 1] = bitmapColor.G;
+                    pixels[p + 0] = bitmapColor.B;
+                    pixels[p + 3] = 255;//アルファは完全不透明にする
+                }
+            }
+            wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);//4.3秒
+
+            //PixelFormatを色数に合わせたものに変更してから返す
+            return OptimisationPixelFormat(wb, palette.Count);
+        }
+
+        //パレットの色で減色2、変換一覧表を使った方法2、一覧作成にDictionaryの並べ替えを使った
+        private BitmapSource ReduceColor2_2(BitmapSource source, List<Color> palette)
+        {
+            var wb = new WriteableBitmap(source);
+            int h = wb.PixelHeight;
+            int w = wb.PixelWidth;
+            int stride = wb.BackBufferStride;
+            byte[] pixels = new byte[h * stride];
+            wb.CopyPixels(pixels, stride, 0);
+            long p = 0;
+            Color bitmapColor;
+            int[] colorCountArray = GetArray24bitColorCount(source);
+            //変換一覧表取得
+            //Dictionaryの並べ替えを使った方法
+            Dictionary<Color, Color> converter = GetDictionaryConvertColor2(colorCountArray, palette);
 
             for (int y = 0; y < h; ++y)//この中が一番時間がかかる
             {
@@ -374,6 +424,7 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
                     pixels[p + 2] = bitmapColor.R;
                     pixels[p + 1] = bitmapColor.G;
                     pixels[p + 0] = bitmapColor.B;
+                    pixels[p + 3] = 255;//アルファは完全不透明にする
                 }
             }
             wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);//4.3秒
@@ -381,7 +432,6 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
             //PixelFormatを色数に合わせたものに変更してから返す            
             return OptimisationPixelFormat(wb, palette.Count);
         }
-        
 
         //表示中の画像の色をカウント
         //RGBをintに変換してそれぞれの色1700万色分ををカウント
@@ -389,8 +439,37 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
         //赤ピクセルRGB(255,0,0)が2個だったらint[255]は2、黒が5個だったらint[0]には5が入る
         private int[] GetArray24bitColorCount(BitmapSource source)
         {
-            var cb = new FormatConvertedBitmap(source, PixelFormats.Rgb24, source.Palette, 0);
-            var wb = new WriteableBitmap(cb);
+            //var cb = new FormatConvertedBitmap(source, PixelFormats.Rgb24, source.Palette, 0);
+            //var wb = new WriteableBitmap(cb);
+            //int h = wb.PixelHeight;
+            //int w = wb.PixelWidth;
+            //int stride = wb.BackBufferStride;// (w * wb.Format.BitsPerPixel + 7) / 8;
+            //byte[] pixels = new byte[h * stride];
+            //wb.CopyPixels(pixels, stride, 0);
+
+            //long p = 0;
+            //int[] colors = new int[256 * 256 * 256];//1700万色
+            //int numColor;
+            ////RGBをintに変換してint配列に入れる
+            //for (int y = 0; y < h; ++y)
+            //{
+            //    for (int x = 0; x < w; ++x)
+            //    {
+            //        p = y * stride + (x * 3);
+            //        //var r = pixels[p];
+            //        //var g = pixels[p + 1];
+            //        //var b = pixels[p + 2];
+            //        numColor = pixels[p] + pixels[p + 1] * 256 + pixels[p + 2] * 256 * 256;
+            //        colors[numColor]++;
+            //        //intからRGBに戻す
+            //        //var nekoR = numColor % 256;
+            //        //var nekoG = numColor / 256 % 256;
+            //        //var nekoB = numColor / 256 / 256;
+            //    }
+            //}
+            //return colors;
+                        
+            var wb = new WriteableBitmap(source);
             int h = wb.PixelHeight;
             int w = wb.PixelWidth;
             int stride = wb.BackBufferStride;// (w * wb.Format.BitsPerPixel + 7) / 8;
@@ -405,11 +484,11 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
             {
                 for (int x = 0; x < w; ++x)
                 {
-                    p = y * stride + (x * 3);
+                    p = y * stride + (x * 4);
                     //var r = pixels[p];
                     //var g = pixels[p + 1];
                     //var b = pixels[p + 2];
-                    numColor = pixels[p] + pixels[p + 1] * 256 + pixels[p + 2] * 256 * 256;
+                    numColor = pixels[p+2] + pixels[p + 1] * 256 + pixels[p] * 256 * 256;
                     colors[numColor]++;
                     //intからRGBに戻す
                     //var nekoR = numColor % 256;
@@ -448,7 +527,46 @@ namespace _20180314_k平均法減色変換時間_変換一覧表
             return converter;
         }
 
-     
+        //変換一覧表作成2、並べ替えで最小値取得
+        //パレットに同じ色があるとエラーになる、しかも遅い
+        //けどラク、見た目とか
+        //                    c# - How to get MAX value from Dictionary? - Stack Overflow
+        //https://stackoverflow.com/questions/10290838/how-to-get-max-value-from-dictionary
+        private Dictionary<Color, Color> GetDictionaryConvertColor2(int[] colors, List<Color> palette)
+        {
+            Color bitmapColor = new Color();
+            Dictionary<Color, Color> converter = new Dictionary<Color, Color>();
+            for (int i = 0; i < colors.Length; ++i)
+            {
+                if (colors[i] != 0)
+                {
+                    var DistanceList = new Dictionary<Color, double>();
+                    bitmapColor = Color.FromRgb((byte)(i % 256), (byte)(i / 256 % 256), (byte)(i / 256 / 256));
+                    for (int j = 0; j < palette.Count; ++j)
+                    {
+                        DistanceList.Add(palette[j], GetColorDistance(bitmapColor, palette[j]));
+                    }
+                    Color neko = DistanceList.OrderBy(x => x.Value).First().Key;
+                    //たぶんどちらでも同じ↑↓
+                    //Color neko = DistanceList.FirstOrDefault(x => x.Value == DistanceList.Values.Min()).Key;
+                    converter.Add(bitmapColor, neko);
+                    
+                    //min = 10000;
+                    //for (int j = 0; j < palette.Count; ++j)
+                    //{
+                    //    distance = GetColorDistance(bitmapColor, palette[j]);
+                    //    if (min > distance)
+                    //    {
+                    //        min = distance;
+                    //        pIndex = j;
+                    //    }
+                    //}
+                    //converter.Add(bitmapColor, palette[pIndex]);
+                }
+            }
+            return converter;
+        }
+
 
 
         //PixelFormatを色数に合わせたものに変更
