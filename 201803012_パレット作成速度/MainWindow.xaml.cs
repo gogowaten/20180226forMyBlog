@@ -581,6 +581,7 @@ namespace _201803012_パレット作成速度
                     pixels[p + 2] = bitmapColor.R;
                     pixels[p + 1] = bitmapColor.G;
                     pixels[p] = bitmapColor.B;
+                    pixels[p + 3] = 255;//アルファは完全不透明にする
                 }
             }
             wb.WritePixels(new Int32Rect(0, 0, w, h), pixels, stride, 0);
