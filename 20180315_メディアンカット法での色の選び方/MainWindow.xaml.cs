@@ -16,14 +16,17 @@ using System.Collections.Concurrent;
 using System.Windows.Threading;
 using System.Diagnostics;
 
+//Cubeから色の選び方、メディアンカットで減色パレット(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15421887.html
+//分割するCubeの選択、メディアンカットで減色パレット(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15425150.html
 
 namespace _20180315_メディアンカット法での色の選び方
 {
     public partial class MainWindow : Window
     {
         BitmapSource OriginBitmap;
-        string ImageFileFullPath;
-        //Border[] MyPalettePan1;
+        string ImageFileFullPath;        
         MyWrapPanel Pan1;
         MyWrapPanel Pan2;
         MyWrapPanel Pan3;
@@ -141,11 +144,13 @@ namespace _20180315_メディアンカット法での色の選び方
 
         private void ButtonCreatePalette_Click(object sender, RoutedEventArgs e)
         {
+            this.IsEnabled = false;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
             CreatePaletteAll();
             stopwatch.Stop();
             TextBlockTime.Text = $"作成時間：{stopwatch.Elapsed.Minutes}分{stopwatch.Elapsed.Seconds}秒{stopwatch.Elapsed.Milliseconds.ToString("000")}";
+            this.IsEnabled = true;
         }
 
         private void CreatePaletteAll()
@@ -160,7 +165,8 @@ namespace _20180315_メディアンカット法での色の選び方
 
             Func<Cube, List<Cube>> FuncSplitBy;
             if (RadioDivideCenter.IsChecked == true) { FuncSplitBy = SplitByLongSide辺の中央; }
-            else { FuncSplitBy = SplitByMedian中央値; }
+            else if (RadioDivideMedian.IsChecked == true) { FuncSplitBy = SplitByMedian中央値; }
+            else { FuncSplitBy = SplitByMinVariance; }
 
             Func<List<Cube>, int> FuncGetIndexSelect;
             if (RadioSelectLongSide.IsChecked == true)
@@ -171,9 +177,17 @@ namespace _20180315_メディアンカット法での色の選び方
             {
                 FuncGetIndexSelect = GetIndexSelectManyPidxelsCube;
             }
-            else
+            else if (RadioSelectCapacity.IsChecked == true)
             {
                 FuncGetIndexSelect = GetSelectIndexCapacityMaxCube;
+            }
+            else if (RadioSelectVariance.IsChecked == true)
+            {
+                FuncGetIndexSelect = GetSelectIndexOfMaxVarianceCube;
+            }
+            else
+            {
+                FuncGetIndexSelect = GetSelectIndexOfMaxVarianceSide;
             }
 
             var Pans = new MyWrapPanel[] { Pan1, Pan2, Pan3, Pan4, Pan5, Pan6 };
@@ -204,7 +218,8 @@ namespace _20180315_メディアンカット法での色の選び方
                 }
                 else
                 {
-                    Pans[i].SetColorList(GetColorListByCubeList(SplitCube(new Cube(OriginBitmap), (int)NumericScrollBar.Value,
+                    //var neko = new Cube(OriginBitmap);
+                    Pans[i].SetColorList(GetColorListByCubeList(SplitCube(new Cube(GetColorList(OriginBitmap)), (int)NumericScrollBar.Value,
                         FuncGetIndexSelect, FuncSplitBy), colorMethod[i]));
                 }
             }
@@ -222,7 +237,29 @@ namespace _20180315_メディアンカット法での色の選び方
 
         }
 
+        //BitmapSourceをColorのListに変換する
+        private List<Color> GetColorList(BitmapSource source)
+        {
+            var bitmap = new FormatConvertedBitmap(source, PixelFormats.Pbgra32, null, 0);
+            var wb = new WriteableBitmap(bitmap);
+            int h = wb.PixelHeight;
+            int w = wb.PixelWidth;
+            int stride = wb.BackBufferStride;
+            byte[] pixels = new byte[h * stride];
+            wb.CopyPixels(pixels, stride, 0);
+            long p = 0;
 
+            var ColorList = new List<Color>();
+            for (int y = 0; y < h; ++y)
+            {
+                for (int x = 0; x < w; ++x)
+                {
+                    p = y * stride + (x * 4);
+                    ColorList.Add(Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]));
+                }
+            }
+            return ColorList;
+        }
 
 
 
@@ -518,36 +555,48 @@ namespace _20180315_メディアンカット法での色の選び方
             Func<List<Cube>, int> GetIndexOfSplitCube,
             Func<Cube, List<Cube>> SplitBy)
         {
-            int loopCount = 1, splitZeroCount = 0;
-            var cubeList = new List<Cube>() { cube };
-            var tempCubeList = new List<Cube>();
+            int loopCount = 1;
+            var cubeList = new List<Cube>() { cube };//元のCubeのリスト
+            var tempCubeList = new List<Cube>();//2分割されたCubeを一時的に入れるリスト
+            var completionList = new List<Cube>();//これ以上分割できないCubeのリスト
             int index;
-            while (splitCount > loopCount && splitZeroCount < 3)
+            //指定数まで分割されるか、これ以上分割できなくなるまでループ
+            while (splitCount > loopCount && cubeList.Count > 0)
             {
                 // どのCubeを分割するのか選定(最大長辺or最大ピクセル数)
                 index = GetIndexOfSplitCube(cubeList);
 
                 //分割してリストに追加
                 tempCubeList.Clear();
-                tempCubeList.AddRange(SplitBy(cubeList[index]));
+                tempCubeList.AddRange(SplitBy(cubeList[index]));//2分割
+
+                //2分割した結果どちらかのCubeのピクセル数が0なら、それ以上分割できないってことなので
+                //別のリストに追加する
                 if (tempCubeList[0].AllPixelsColor.Count == 0 || tempCubeList[1].AllPixelsColor.Count == 0)
                 {
-                    splitZeroCount++;
-                    //cubeList.AddRange(tempCubeList);
-                    //cubeList.RemoveAt(index);
-                    //break;
+                    if (tempCubeList[0].AllPixelsColor.Count == 0)
+                    {
+                        completionList.Add(tempCubeList[1]);
+                    }
+                    else { completionList.Add(tempCubeList[0]); }
                 }
-                cubeList.AddRange(tempCubeList);
+                //普通に2分割できたら元のリストに追加
+                else
+                {
+                    cubeList.AddRange(tempCubeList);
+                }
+
                 //分割のもとになったCubeをリストから削除
                 cubeList.RemoveAt(index);
-                //if (tempCubeList[0].AllPixelsColor.Count != 0) { cubeList.Add(tempCubeList[0]); }
-                //if (tempCubeList[1].AllPixelsColor.Count != 0) { cubeList.Add(tempCubeList[1]); }
 
                 loopCount++;
             }
+            //
+            cubeList.AddRange(completionList);
             return cubeList;
         }
-        private List<Cube> SplitCube(List<Color> listColors,
+        private List<Cube> SplitCube(
+            List<Color> listColors,
             int splitCount,
             Func<List<Cube>, int> GetIndexOfSplitCube,
             Func<Cube, List<Cube>> SplitBy)
@@ -605,6 +654,73 @@ namespace _20180315_メディアンカット法での色の選び方
             }
             return index;
         }
+
+        //最大分散のCubeのindex取得
+        private int GetSelectIndexOfMaxVarianceCube(List<Cube> cubeList)
+        {
+            int index = 0;
+            double max = 0;
+            double variance = 0;
+
+            for (int i = 0; i < cubeList.Count; ++i)
+            {
+                //分散
+                double[] rgbVariance = GetRGBごとの分散(cubeList[i]);
+                variance = rgbVariance[0] + rgbVariance[1] + rgbVariance[2];
+                if (max < variance)
+                {
+                    max = variance;
+                    index = i;
+                }
+            }
+            return index;
+        }
+        //最大分散辺を持つCubeのindex取得
+        private int GetSelectIndexOfMaxVarianceSide(List<Cube> cubeList)
+        {
+            int index = 0;
+            double max = 0;
+            double variance = 0;
+            for (int i = 0; i < cubeList.Count; ++i)
+            {
+                double[] rgbVariance = GetRGBごとの分散(cubeList[i]);
+                variance = Math.Max(rgbVariance[0], Math.Max(rgbVariance[1], rgbVariance[2]));
+                if (max < variance)
+                {
+                    max = variance;
+                    index = i;
+                }
+            }
+            return index;
+        }
+        private double[] GetRGBごとの分散(Cube iCube)
+        {
+            //Cubeの分散の変数に数値が入っていなければ計算して入れて返す
+            if (double.IsNaN(iCube.VarianceMax) == true)
+            {
+                double rVar = 0, gVar = 0, bVar = 0;
+                Color pxColor;
+                long count = 0;
+                count = iCube.AllPixelsColor.Count;
+
+                rVar = 0; gVar = 0; bVar = 0;
+                for (int j = 0; j < count; ++j)
+                {
+                    pxColor = iCube.AllPixelsColor[j];
+                    rVar += Math.Pow(pxColor.R - iCube.RedPixAverage, 2f);//偏差の2乗の合計
+                    gVar += Math.Pow(pxColor.G - iCube.GreenPixAverage, 2f);
+                    bVar += Math.Pow(pxColor.B - iCube.BluePixAverage, 2f);
+                }
+                //Cubeの分散の変数に分散を入れる
+                iCube.RedVariance = rVar / count;
+                iCube.GreenVariance = gVar / count;
+                iCube.BlueVariance = bVar / count;
+                iCube.VarianceMax = Math.Max(iCube.RedVariance, Math.Max(iCube.GreenVariance, iCube.BlueVariance));
+            }
+            return new double[] { iCube.RedVariance, iCube.GreenVariance, iCube.BlueVariance };
+        }
+
+
         #endregion
 
 
@@ -650,12 +766,12 @@ namespace _20180315_メディアンカット法での色の選び方
 
 
 
-        #region 分割、辺の中央or長辺にある中央値
+        #region 分割場所、辺の中央or長辺にある中央値
 
 
         //一番長い辺で2分割
         //RGB同じだった場合はRGBの順で優先
-        public List<Cube> SplitByLongSide辺の中央(Cube cube)
+        private List<Cube> SplitByLongSide辺の中央(Cube cube)
         {
             if (cube.LengthMax == cube.LengthRed)
             {//Rの辺が最長の場合、R要素の中間で2分割                
@@ -673,7 +789,7 @@ namespace _20180315_メディアンカット法での色の選び方
 
         //中央値で2分割、メディアンカット
         //辺の選択は長辺、RGB同じだった場合はRGBの順で優先
-        public List<Cube> SplitByMedian中央値(Cube cube)
+        private List<Cube> SplitByMedian中央値(Cube cube)
         {
             float mid;
             List<byte> list = new List<byte>();
@@ -705,7 +821,6 @@ namespace _20180315_メディアンカット法での色の選び方
                 return SplitBlueCube(cube, mid);
             }
         }
-
         private float GetMedian(List<byte> list)
         {
             list.Sort();
@@ -716,6 +831,7 @@ namespace _20180315_メディアンカット法での色の選び方
             }
             else { return list[(lCount - 1) / 2]; }
         }
+        //ここまでメディアン
 
         private List<Cube> SplitRedCube(Cube cube, float mid)
         {
@@ -773,6 +889,91 @@ namespace _20180315_メディアンカット法での色の選び方
             });
             return new List<Cube>() { new Cube(low.ToList()), new Cube(high.ToList()) };
         }
+
+
+        //最大分散辺を最小分散になるように分割
+        private List<Cube> SplitByMinVariance(Cube cube)
+        {
+            if (double.IsNaN(cube.VarianceMax)) { GetRGBごとの分散(cube); }
+
+            List<int> iList = new List<int>();
+            List<Cube> cubeList = new List<Cube>();
+            //赤が最大分散辺のとき
+            if (cube.VarianceMax == cube.RedVariance)
+            {
+                iList = GetNoJuuhuku(cube.AllColor, "r");
+                cubeList = SplitRedCube(cube, GetMidFromVariance(iList));
+            }
+            else if (cube.VarianceMax == cube.GreenVariance)
+            {
+                iList = GetNoJuuhuku(cube.AllColor, "g");
+                cubeList = SplitGreenCube(cube, GetMidFromVariance(iList));
+            }
+            else if (cube.VarianceMax == cube.BlueVariance)
+            {
+                iList = GetNoJuuhuku(cube.AllColor, "b");
+                cubeList = SplitBlueCube(cube, GetMidFromVariance(iList));
+            }
+            //E:\オレ\エクセル\C#.xlsm_色の距離_$C$358
+            ////cList = new List<int> { 24, 52, 190, 193, 226, 231, 247, 248, 250 };
+
+
+            return cubeList;
+        }
+        //昇順リストを2分割する時、分散後が最小分散になる閾値を返す
+        private int GetMidFromVariance(List<int> iList)
+        {
+            //分割する位置を1つづつ増やす
+            //分散後の2つ(foreList、backList)の分散値を合計
+            //合計値が一番少なくなる場所(index)を特定
+            //その場所になる値を返す
+            double foreList, bakcList, min = double.MaxValue;
+            int index = 0;
+            for (int i = 2; i < iList.Count; ++i)
+            {
+                foreList = GetVariance(iList.GetRange(0, i));//分散取得
+                bakcList = GetVariance(iList.GetRange(i, iList.Count - i));
+                //最小分散になる場所を特定する
+                if (min > foreList + bakcList)
+                {
+                    min = foreList + bakcList;
+                    index = i;
+                }
+            }
+            return iList[index];
+        }
+
+        //分散を取得
+        private double GetVariance(List<int> list)
+        {
+            var ave = list.Average();
+            double variance = 0;
+            for (int i = 0; i < list.Count; ++i)
+            {
+                variance += Math.Pow(list[i] - ave, 2f);
+            }
+            variance /= list.Count;
+            return variance;
+        }
+        //ColorListから重複なしの昇順リスト、RGBどれかを指定
+        private List<int> GetNoJuuhuku(List<Color> list, string rgb)
+        {
+            var sList = new SortedSet<int>();
+            for (int i = 0; i < list.Count; ++i)
+            {
+                try
+                {
+                    if (rgb == "r") { sList.Add(list[i].R); }
+                    else if (rgb == "g") { sList.Add(list[i].G); }
+                    else if (rgb == "b") { sList.Add(list[i].B); }
+                }
+                catch (Exception)
+                {
+                }
+            }
+            return sList.ToList();
+        }
+
         #endregion
 
 
@@ -784,21 +985,12 @@ namespace _20180315_メディアンカット法での色の選び方
         //平均色、Cubeの中心の色じゃなくてピクセルの平均
         public Color GetColorCubeAverage平均色(Cube cube)
         {
-            List<Color> colorList = cube.AllPixelsColor;
-            long r = 0, g = 0, b = 0;
-            int cCount = colorList.Count;
-            if (cCount == 0)
+            if (cube.AllPixelsColor.Count == 0)
             {
                 return Color.FromRgb(127, 127, 127);
             }
 
-            for (int i = 0; i < cCount; ++i)
-            {
-                r += colorList[i].R;
-                g += colorList[i].G;
-                b += colorList[i].B;
-            }
-            return Color.FromRgb((byte)(r / cCount), (byte)(g / cCount), (byte)(b / cCount));
+            return Color.FromRgb((byte)cube.RedPixAverage, (byte)cube.GreenPixAverage, (byte)cube.BluePixAverage);
         }
 
 
@@ -816,17 +1008,6 @@ namespace _20180315_メディアンカット法での色の選び方
         {
             double distance;
             double max = 0;
-            //int lIndex = 0;
-            //for (int i = 0; i < cube.AllPixelsColor.Count; ++i)
-            //{
-            //    distance = GetColorDistance(127.5, 127.5, 127.5, cube.AllPixelsColor[i]);
-            //    if (max < distance)
-            //    {
-            //        max = distance;
-            //        lIndex = i;
-            //    }
-            //}
-            //return cube.AllPixelsColor[lIndex];
 
             Color distantColor = Colors.Black;
             foreach (Color item in cube.AllColor)
@@ -905,36 +1086,7 @@ namespace _20180315_メディアンカット法での色の選び方
             }
             return distantColor;
         }
-        ////Cubeの8隅のうちCubeの中心から一番遠い隅
-        //private Color GetColorCubeVertexDistantCore(Cube cube)
-        //{
-        //    double distance;
-        //    double max = 0;
-        //    int lIndex = 0;
-        //    Color coreColor = GetColorCubeCore中心色(cube);//Cubeの中心色
-        //    var corner8 = new Color[]//8隅の色
-        //    {
-        //        Color.FromRgb(cube.MinRed,cube.MinGreen,cube.MinBlue),
-        //        Color.FromRgb(cube.MinRed,cube.MinGreen,cube.MaxBlue),
-        //        Color.FromRgb(cube.MinRed,cube.MaxGreen,cube.MinBlue),
-        //        Color.FromRgb(cube.MaxRed,cube.MinGreen,cube.MinBlue),
-        //        Color.FromRgb(cube.MinRed,cube.MaxGreen,cube.MaxBlue),
-        //        Color.FromRgb(cube.MaxRed,cube.MinGreen,cube.MaxBlue),
-        //        Color.FromRgb(cube.MaxRed,cube.MaxGreen,cube.MinBlue),
-        //        Color.FromRgb(cube.MaxRed,cube.MaxGreen,cube.MaxBlue),
-        //    };
 
-        //    for (int i = 0; i < corner8.Length; ++i)
-        //    {
-        //        distance = GetColorDistance(coreColor, corner8[i]);
-        //        if (max < distance)
-        //        {
-        //            max = distance;
-        //            lIndex = i;
-        //        }
-        //    }
-        //    return corner8[lIndex];
-        //}
 
         //RGBそれぞれの中央値(メディアン)
         private Color GetColorCubeMedian(Cube cube)
@@ -1073,7 +1225,20 @@ namespace _20180315_メディアンカット法での色の選び方
                 MyImage.Source = OriginBitmap;
                 ImageOrigin.Source = OriginBitmap;
                 ImageFileFullPath = filePath[0];
+                TextBlockPixelsCount.Text = $" 画像の使用色数：{GetColorCount(OriginBitmap)}";
+                TextBlockImageSize.Text = $"画像サイズ：{OriginBitmap.PixelWidth}x{OriginBitmap.PixelHeight}";
             }
+        }
+
+        private int GetColorCount(BitmapSource source)
+        {
+            List<Color> cl = GetColorList(source);
+            var bag = new ConcurrentBag<Color>();
+            Parallel.ForEach(cl, item =>
+            {
+                bag.Add(item);
+            });
+            return bag.Count;
         }
 
         /// <summary>
@@ -1117,7 +1282,8 @@ namespace _20180315_メディアンカット法での色の選び方
 
     /// <summary>
     /// RGBそれぞれの最小値と最大値を持つクラス
-    /// その他にRGBそれぞれの辺の長さ、画像の全ピクセルの色、使用されている色を持つ
+    /// その他にRGBそれぞれの辺の長さ、平均値、画像の全ピクセルの色、使用されている色数を持つ
+    /// RGBそれぞれの分散値はNaNを入れておいて必要な時に入れる
     /// コンストラクタはbitmapSourceかColorのListから作成するものだけ、それだけのクラス
     /// </summary>
     public class Cube
@@ -1128,6 +1294,13 @@ namespace _20180315_メディアンカット法での色の選び方
         public byte MaxRed;//最大赤
         public byte MaxGreen;
         public byte MaxBlue;
+        public float RedPixAverage;//ピクセル数を加味した平均赤
+        public float GreenPixAverage;
+        public float BluePixAverage;
+        public double RedVariance;//赤の分散
+        public double GreenVariance;
+        public double BlueVariance;
+        public double VarianceMax;
         public List<Color> AllPixelsColor;//すべてのピクセルの色リスト        
         public List<Color> AllColor;//使用されているすべての色リスト
         public int LengthMax;//Cubeの最大辺長
@@ -1135,56 +1308,43 @@ namespace _20180315_メディアンカット法での色の選び方
         public int LengthGreen;
         public int LengthBlue;
 
-        //BitmapSourceからCubeを作成
-        public Cube(BitmapSource source)
-        {
-            var bitmap = new FormatConvertedBitmap(source, PixelFormats.Pbgra32, null, 0);
-            var wb = new WriteableBitmap(bitmap);
-            int h = wb.PixelHeight;
-            int w = wb.PixelWidth;
-            int stride = wb.BackBufferStride;
-            byte[] pixels = new byte[h * stride];
-            wb.CopyPixels(pixels, stride, 0);
-            long p = 0;
-            byte cR, cG, cB;
-            byte lR = 255, lG = 255, lB = 255, hR = 0, hG = 0, hB = 0;
-            AllPixelsColor = new List<Color>();
-            for (int y = 0; y < h; ++y)
-            {
-                for (int x = 0; x < w; ++x)
-                {
-                    p = y * stride + (x * 4);
-                    cR = pixels[p + 2]; cG = pixels[p + 1]; cB = pixels[p];
-                    AllPixelsColor.Add(Color.FromRgb(cR, cG, cB));
-                    if (lR > cR) { lR = cR; }
-                    if (lG > cG) { lG = cG; }
-                    if (lB > cB) { lB = cB; }
-                    if (hR < cR) { hR = cR; }
-                    if (hG < cG) { hG = cG; }
-                    if (hB < cB) { hB = cB; }
-                }
-            }
-            //重複を除いて使用されている色リスト作成、Distinct
-            //IEnumerable<Color> result = AllPixelsColor.Distinct();
-            AllColor = AllPixelsColor.Distinct().ToList();//これの処理コストが結構大きい
+        ////BitmapSourceからCubeを作成
+        //public Cube(BitmapSource source)
+        //{
+        //    var bitmap = new FormatConvertedBitmap(source, PixelFormats.Pbgra32, null, 0);
+        //    var wb = new WriteableBitmap(bitmap);
+        //    int h = wb.PixelHeight;
+        //    int w = wb.PixelWidth;
+        //    int stride = wb.BackBufferStride;
+        //    byte[] pixels = new byte[h * stride];
+        //    wb.CopyPixels(pixels, stride, 0);
+        //    long p = 0;
 
-            MinRed = lR; MinGreen = lG; MinBlue = lB;
-            MaxRed = hR; MaxGreen = hG; MaxBlue = hB;
-            LengthRed = 1 + MaxRed - MinRed;
-            LengthGreen = 1 + MaxGreen - MinGreen;
-            LengthBlue = 1 + MaxBlue - MinBlue;
-            LengthMax = Math.Max(LengthRed, Math.Max(LengthGreen, LengthBlue));
-        }
+        //    var ColorList = new List<Color>();
+        //    for (int y = 0; y < h; ++y)
+        //    {
+        //        for (int x = 0; x < w; ++x)
+        //        {
+        //            p = y * stride + (x * 4);
+        //            ColorList.Add(Color.FromRgb(pixels[p + 2], pixels[p + 1], pixels[p]));
+        //        }
+        //    }
+        //    new Cube(ColorList);//これだと何も入らない空っぽ
+
+        //}
+
 
         //ColorのリストからCube作成
         public Cube(List<Color> color)
         {
             byte lR = 255, lG = 255, lB = 255, hR = 0, hG = 0, hB = 0;
             byte cR, cG, cB;
+            long rAdd = 0, gAdd = 0, bAdd = 0;
             AllPixelsColor = new List<Color>();
             foreach (Color item in color)
             {
                 cR = item.R; cG = item.G; cB = item.B;
+                rAdd += cR; gAdd += cG; bAdd += cB;
                 AllPixelsColor.Add(Color.FromRgb(cR, cG, cB));
                 if (lR > cR) { lR = cR; }
                 if (lG > cG) { lG = cG; }
@@ -1194,7 +1354,7 @@ namespace _20180315_メディアンカット法での色の選び方
                 if (hB < cB) { hB = cB; }
             }
             //重複を除いて使用されている色リスト作成、Distinct
-            AllColor = AllPixelsColor.Distinct().ToList();//これの処理コストが結構大きい
+            AllColor = AllPixelsColor.Distinct().ToList();//これの処理コストが結構大きい？
 
             MinRed = lR; MinGreen = lG; MinBlue = lB;
             MaxRed = hR; MaxGreen = hG; MaxBlue = hB;
@@ -1202,6 +1362,16 @@ namespace _20180315_メディアンカット法での色の選び方
             LengthGreen = 1 + MaxGreen - MinGreen;
             LengthBlue = 1 + MaxBlue - MinBlue;
             LengthMax = Math.Max(LengthRed, Math.Max(LengthGreen, LengthBlue));
+            //平均値
+            float count = color.Count;
+            RedPixAverage = rAdd / count;
+            GreenPixAverage = gAdd / count;
+            BluePixAverage = bAdd / count;
+            //分散はとりあえず非数を入れておく
+            RedVariance = double.NaN;
+            GreenVariance = double.NaN;
+            BlueVariance = double.NaN;
+            VarianceMax = double.NaN;
         }
 
         //#region 分割
@@ -1308,6 +1478,10 @@ namespace _20180315_メディアンカット法での色の選び方
 
     }
 
+
+    /// <summary>
+    /// パレット表示用のBorderの配列の管理
+    /// </summary>
     public class MyWrapPanel : WrapPanel
     {
         public List<Color> Palette { set; get; }

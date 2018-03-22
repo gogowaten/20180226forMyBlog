@@ -32,6 +32,8 @@
             <RotateTransform Angle="180"/>
           </ScrollBar.RenderTransform>
         </ScrollBar>
+        <TextBlock Name="TextBlockImageSize" Text="image size" FontSize="18"/>
+        <TextBlock Name="TextBlockPixelsCount" Text="pixels count" FontSize="18"/>
       </StackPanel>
       <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
         <TextBlock Text="走査ピクセル数" Width="90"/>
@@ -41,14 +43,17 @@
       </StackPanel>
       <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
         <TextBlock Text="分割Cube選択法" VerticalAlignment="Center" Width="90"/>
-        <RadioButton Name="RadioSelectLongSide" Content="長辺" IsChecked="True"/>
-        <RadioButton Name="RadioSelectManyPixels" Content="ピクセル数"/>
-        <RadioButton Name="RadioSelectCapacity" Content="体積"/>
+        <RadioButton Name="RadioSelectLongSide" Content="最大長辺" IsChecked="True"/>
+        <RadioButton Name="RadioSelectManyPixels" Content="最大ピクセル数"/>
+        <RadioButton Name="RadioSelectCapacity" Content="最大体積"/>
+        <RadioButton Name="RadioSelectVariance" Content="最大分散Cube"/>
+        <RadioButton Name="RadioSelectMaxVarianceSide" Content="最大分散辺"/>
       </StackPanel>
       <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
         <TextBlock Text="分割場所" VerticalAlignment="Center" Width="90"/>
         <RadioButton Name="RadioDivideCenter" Content="辺の中央" IsChecked="True"/>
         <RadioButton Name="RadioDivideMedian" Content="中央値"/>
+        <RadioButton Name="RadioDivedeVariance" Content="最小分散"/>
       </StackPanel>
       <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
         <Button Name="ButtonCreatePalette" Content="パレット作成"/>
