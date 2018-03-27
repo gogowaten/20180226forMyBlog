@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Collections.Concurrent;
 using System.Windows.Threading;
 using System.Diagnostics;
+//パレットを使った減色で誤差拡散(ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15432449.html
 
 namespace _20180325_メディアンカット_誤差拡散
 {
