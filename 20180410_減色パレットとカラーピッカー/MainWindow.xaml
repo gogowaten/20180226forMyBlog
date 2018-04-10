@@ -1,0 +1,120 @@
+﻿<Window x:Class="_20180410_減色パレットとカラーピッカー.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180410_減色パレットとカラーピッカー"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="550">
+  <Window.Resources>
+    <Style TargetType="Button">
+      <Setter Property="Margin" Value="2,2,0,2"/>
+    </Style>
+    <Style TargetType="RadioButton">
+      <Setter Property="Margin" Value="10,0,0,0"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    <Style TargetType="TextBlock">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Margin" Value="2,0"/>
+    </Style>
+  </Window.Resources>
+  <Grid>
+    <DockPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+        <TextBlock Name="TextBlockImageSize" Text="image size"/>
+        <TextBlock Name="TextBlockColorsCount" Text="pixels count"/>
+      </StackPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <TextBlock Name="TextBlockPixelCount" Text="pixels count"/>
+        <TextBlock Text="走査ピクセル数" Width="90" TextAlignment="Right"/>
+        <RadioButton Name="RadioPixels100k" Content="10万" IsChecked="True"/>
+        <RadioButton Name="RadioPixelsMillion" Content="100万"/>
+        <RadioButton Name="RadioPixelsAll" Content="全部"/>
+      </StackPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <TextBlock Text="分割Cube選択" VerticalAlignment="Center" Width="90"/>
+        <ComboBox Name="ComboBoxSplitPriority"/>
+        <!--<RadioButton Name="RadioSelectLongSide" Content="最大長辺" IsChecked="True"/>
+        <RadioButton Name="RadioSelectManyPixels" Content="最大ピクセル数"/>
+        <RadioButton Name="RadioSelectCapacity" Content="最大体積"/>
+        <RadioButton Name="RadioSelectVariance" Content="最大分散Cube"/>
+        <RadioButton Name="RadioSelectMaxVarianceSide" Content="最大分散辺"/>-->
+      </StackPanel>
+      <!--<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <TextBlock Text="分割場所" VerticalAlignment="Center" Width="90"/>
+        <RadioButton Name="RadioDivideCenter" Content="辺の中央" IsChecked="True"/>
+        <RadioButton Name="RadioDivideMedian" Content="中央値"/>
+        <RadioButton Name="RadioDivedeVariancePixel" Content="最小分散(ピクセル数考慮)"/>
+        <RadioButton Name="RadioDivedeVariance" Content="最小分散"/>
+      </StackPanel>-->
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <TextBlock Text="Cubeから色選択" VerticalAlignment="Center" Width="90"/>
+        <ComboBox Name="ComboBoxSelectColorMethod"/>
+      </StackPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <TextBlock Text="色数" VerticalAlignment="Center" Margin="4,0" FontSize="18"/>
+        <TextBox Name="NumericTextBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                 Text="{Binding ElementName=NumericScrollBar, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                 Width="40" FontSize="18"/>
+        <ScrollBar Name="NumericScrollBar" Value="4" Minimum="1" Maximum="256" SmallChange="1" LargeChange="1"
+                   RenderTransformOrigin="0.5,0.5">
+          <ScrollBar.RenderTransform>
+            <RotateTransform Angle="180"/>
+          </ScrollBar.RenderTransform>
+        </ScrollBar>
+        <Button Name="ButtonCreatePalette" Content="パレット作成"/>
+        <TextBlock Name="TextBlockTime" Text="timer"/>
+      </StackPanel>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <CheckBox Name="CheckGosa" Content="誤差拡散" VerticalAlignment="Center" ToolTip="減色時に誤差拡散を使う(FloydStainberg)"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" DockPanel.Dock="top">
+        <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Width="384">
+          <DockPanel HorizontalAlignment="Left">
+            <StackPanel Name="StackPanelPan1" DockPanel.Dock="Top" Orientation="Horizontal">
+              <TextBlock Text="辺中央" Width="60"/>
+              <Button Name="ButtonReduceColor" Content="減色"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelPan2" DockPanel.Dock="Top" Orientation="Horizontal">
+              <TextBlock Text="中央値" Width="60"/>
+              <Button Name="ButtonReduceColor2" Content="減色"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelPan3" DockPanel.Dock="Top" Orientation="Horizontal">
+              <TextBlock Text="最小分散p" Width="60"/>
+              <Button Name="ButtonReduceColor3" Content="減色"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelPan4" DockPanel.Dock="Top" Orientation="Horizontal">
+              <TextBlock Text="最小分散c" Width="60"/>
+              <Button Name="ButtonReduceColor4" Content="減色"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelPan5" DockPanel.Dock="Top" Orientation="Horizontal">
+              <TextBlock Text="Pan5"/>
+              <Button Name="ButtonReduceColor5" Content="減色"/>
+            </StackPanel>
+            <StackPanel Name="StackPanelPan6" DockPanel.Dock="Top" Orientation="Horizontal">
+              <TextBlock Text="Pan6"/>
+              <Button Name="ButtonReduceColor6" Content="減色"/>
+            </StackPanel>
+          </DockPanel>
+        </ScrollViewer>
+        <Image Name="ImageOrigin" Stretch="Uniform" UseLayoutRounding="True" Height="120"></Image>
+      </StackPanel>
+      <!--<StackPanel Name="StackPanelPan7" DockPanel.Dock="Top" Orientation="Horizontal">
+        <Button Name="Button7" Content="作成7" Width="50" ToolTip=""/>
+        <Button Name="ButtonReduceColor7" Content="減色"/>
+        -->
+      <!--
+      </StackPanel>-->
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+        <Button Name="ButtonOrigin" Content="元の画像に戻す"/>
+        <Button Name="ButtonSaveImage" Content="画像を保存する"/>
+        <Button Name="ButtonTest" Content="test" ToolTip="辺中央パレットでパターンディザを使って減色(不具合あり)"/>
+      </StackPanel>
+
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" UseLayoutRounding="True">
+        <Image Name="MyImage" UseLayoutRounding="True" Stretch="None"/>
+      </ScrollViewer>
+    </DockPanel>
+  </Grid>
+</Window>

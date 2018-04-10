@@ -1,0 +1,24 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180410_減色パレットとカラーピッカー"
+        xmlns:ColorPickerLibrary="clr-namespace:ColorPickerLibrary;assembly=ColorPickerLibrary" x:Class="_20180410_減色パレットとカラーピッカー.Window1ColorPicker"
+        mc:Ignorable="d"
+        Title="Window1ColorPicker" Height="200" Width="410">
+  <Grid>
+    <StackPanel>
+      <ColorPickerLibrary:ColorPicker Name="ColorPicker"/>
+
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="ButtonSetColor" Margin="20" Content="Set"/>
+        <Button x:Name="ButtonCancel" Margin="20" Content="Cancel" Grid.Column="1"/>
+      </Grid>
+    </StackPanel>   
+  </Grid>
+</Window>
