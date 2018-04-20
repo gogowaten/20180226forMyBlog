@@ -1,0 +1,41 @@
+﻿<Window x:Class="_20180420_拡大縮小_バイキュービック.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180420_拡大縮小_バイキュービック"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="100"/>
+    </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Image Name="MyImage" UseLayoutRounding="True" Stretch="None" SnapsToDevicePixels="True"/>
+    </ScrollViewer>
+    <StackPanel Grid.Column="1">
+      <TextBlock Text="{Binding ElementName=SliderScaleX, Path=Value, StringFormat=横倍率 0.0}"/>
+      <Slider Name="SliderScaleX" Minimum="0.1" Maximum="10" SmallChange="0.1" LargeChange="0.1"
+              IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"
+              Value="1"/>
+      <TextBlock Text="{Binding ElementName=SliderScaleY, Path=Value, StringFormat=縦倍率 0.0}"/>
+      <Slider Name="SliderScaleY" Minimum="0.1" Maximum="10" SmallChange="0.1" LargeChange="0.1"
+              IsMoveToPointEnabled="True" IsSnapToTickEnabled="True"
+              Value="1"/>
+
+      <TextBlock Text="{Binding ElementName=SliderCubicFactor, Path=Value, StringFormat=Cubic係数 {0:0.0}}"/>
+      <Slider Name="SliderCubicFactor" Minimum="-3.0" Maximum="1.0" SmallChange="0.1" LargeChange="0.1"
+              IsMoveToPointEnabled="True" SnapsToDevicePixels="True"
+              Value="-1.0"/>
+
+      <!--<Button Name="MyButtonCubicGray" Content="バイキュービック(グレースケール)"/>-->
+      <Button Name="MyButtonCubicGray2" Content="バイキュービック2(グレースケール)"/>
+      <Button Name="MyButtonCubicColor" Content="バイキュービックcolor"/>
+      <!--<Button Name="MyButtonCubicColor2" Content="バイキュービック2color"/>-->
+      <Button Name="MyButton2x2" Content="今表示の2倍"/>
+      <Button Name="MyButtonOrigin" Content="もとに戻す"/>
+      <Button Name="MyButtonSave" Content="保存"/>
+    </StackPanel>
+  </Grid>
+</Window>
