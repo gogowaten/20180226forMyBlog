@@ -1,0 +1,82 @@
+﻿<Window x:Class="_20180508_unsafeで画像処理.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180508_unsafeで画像処理"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="360" Width="525">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="150"/>
+    </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Image Name="MyImage" Stretch="None" UseLayoutRounding="True"/>
+    </ScrollViewer>
+    <StackPanel Grid.Column="1">
+      <Button Name="MyButtonOrigin" Content="もとに戻す"/>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton1" Content="処理1"/>
+        <TextBlock Name="MyTextBlock1"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton2" Content="処理2"/>
+        <TextBlock Name="MyTextBlock2"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton3" Content="処理3"/>
+        <TextBlock Name="MyTextBlock3"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton4" Content="処理4"/>
+        <TextBlock Name="MyTextBlock4"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton5" Content="処理5"/>
+        <TextBlock Name="MyTextBlock5"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton6" Content="処理6"/>
+        <TextBlock Name="MyTextBlock6"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton7" Content="処理7"/>
+        <TextBlock Name="MyTextBlock7"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton8" Content="処理8"/>
+        <TextBlock Name="MyTextBlock8"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton9" Content="処理9"/>
+        <TextBlock Name="MyTextBlock9"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton10" Content="処理10"/>
+        <TextBlock Name="MyTextBlock10"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton11" Content="処理11"/>
+        <TextBlock Name="MyTextBlock11"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton12" Content="処理12"/>
+        <TextBlock Name="MyTextBlock12"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton13" Content="処理13"/>
+        <TextBlock Name="MyTextBlock13"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton14" Content="処理14"/>
+        <TextBlock Name="MyTextBlock14"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal">
+        <Button Name="MyButton15" Content="処理15"/>
+        <TextBlock Name="MyTextBlock15"/>
+      </StackPanel>
+
+    </StackPanel>
+  </Grid>
+</Window>
