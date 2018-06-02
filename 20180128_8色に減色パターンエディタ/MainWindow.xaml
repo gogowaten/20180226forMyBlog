@@ -1,0 +1,54 @@
+﻿<Window x:Class="_20180128_8色に減色パターンエディタ.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180128_8色に減色パターンエディタ"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="525">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="200"/>
+    </Grid.ColumnDefinitions>
+    <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Image Name="MyImage" UseLayoutRounding="True" Stretch="None"/>
+    </ScrollViewer>
+    <StackPanel Grid.Column="1">
+      <Button Name="ButtonOrigin" Content="元の画像"/>
+      <StackPanel Orientation="Horizontal">
+      <Button Name="ButtonTest1" Content="2x2" Height="40" Margin="2"/>
+      <Button Name="ButtonTest2" Content="4x4" Margin="2"/>
+      <Button Name="ButtonTest3" Content="test3" Margin="2"/>
+      <Button Name="ButtonTest4" Content="test4" Margin="2"/>
+      <Button Name="ButtonTest5" Content="test5" Margin="2"/>
+      </StackPanel>
+      <CheckBox Name="CheckBoxLinkMatrix" Content="パターンを行列に反映する"/>
+      <Button Name="ButtonGetThresholdMatrix" Content="test6"/>
+      <GroupBox Header="ディザなし">
+        <StackPanel>
+          <Button Name="ButtonNotDithering" Content="変換"/>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="しきい値" VerticalAlignment="Center" Margin="4,0"/>
+            <TextBox Name="NumericTextBox" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"
+                 Text="{Binding ElementName=NumericScrollBar, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                 Width="30"/>
+            <ScrollBar Name="NumericScrollBar" Value="128" Minimum="0" Maximum="255" SmallChange="1" LargeChange="1"
+                   RenderTransformOrigin="0.5,0.5">
+              <ScrollBar.RenderTransform>
+                <RotateTransform Angle="180"/>
+              </ScrollBar.RenderTransform>
+            </ScrollBar>
+          </StackPanel>
+        </StackPanel>
+      </GroupBox>
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Text="保存時のbpp(目安)" VerticalAlignment="Center"/>
+        <ComboBox Name="ComboBpp"/>
+      </StackPanel>
+      <StackPanel Name="MyStackPanel">
+        
+      </StackPanel>
+    </StackPanel>
+  </Grid>
+</Window>
