@@ -1,0 +1,14 @@
+﻿<Window x:Class="_20180609_クリックで直線_ベジェ曲線で直線.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180609_クリックで直線_ベジェ曲線で直線"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+    <Canvas Name="MyCanvas" Background="Transparent">
+      <Path Name="MyPath" Stroke="DarkKhaki" StrokeThickness="16"/>
+    </Canvas>
+  </Grid>
+</Window>
