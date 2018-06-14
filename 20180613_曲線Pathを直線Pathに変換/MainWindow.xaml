@@ -1,0 +1,30 @@
+﻿<Window x:Class="_20180613_曲線Pathを直線Pathに変換.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180613_曲線Pathを直線Pathに変換"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+  <Grid Name="MyGrid" Margin="0,10,0,0">
+    <Path Name="MyPath" Stroke="Orange" StrokeThickness="10"><!--元のベジェ曲線-->
+      <Path.Data>
+        <PathGeometry Figures="M40,10 C30,240 230,240 210,190 180,140 30,300 190,290 "/>
+      </Path.Data>
+    </Path>
+    <Path Name="StepLine" Stroke="Blue"/><!--直線用-->
+
+    <DockPanel>
+      <TextBlock DockPanel.Dock="Top" FontSize="20" TextAlignment="Center" Text="GetFlattenedPathGeometry"/>
+      <TextBlock DockPanel.Dock="Top" FontSize="20" TextAlignment="Center" Text="ToleranceType"/>
+      <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+        <RadioButton Name="RadioAbsolute" Content="Absolute" FontSize="20" VerticalContentAlignment="Center" Margin="20,0" IsChecked="True"/>
+        <RadioButton Name="RadioRelative" Content="Relative" FontSize="20" VerticalContentAlignment="Center" Margin="20,0"/>
+      </StackPanel>
+      <TextBlock DockPanel.Dock="Top" FontSize="20" TextAlignment="Center"
+                 Text="{Binding ElementName=StepSlider, Path=Value, StringFormat=Tolerance\=0.0}"/>
+      <Slider DockPanel.Dock="Top" Name="StepSlider" IsMoveToPointEnabled="True" IsSnapToTickEnabled="True" Maximum="550" TickFrequency="0.1"/>
+    </DockPanel>
+
+  </Grid>
+</Window>
