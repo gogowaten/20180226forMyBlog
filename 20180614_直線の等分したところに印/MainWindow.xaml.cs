@@ -34,7 +34,7 @@ namespace _20180614_直線の等分したところに印
         }
 
         //表示をクリア
-        private void ClealStepObject()
+        private void ClearStepObject()
         {
             foreach (var item in MyListLabel)
             {
@@ -51,7 +51,7 @@ namespace _20180614_直線の等分したところに印
         //Step(分割)数変更時とかに実行
         private void ChangeStep()
         {
-            ClealStepObject();//表示をクリア
+            ClearStepObject();//表示をクリア
 
             double step = SliderStep.Value;
             var pg = (PathGeometry)MyPath.Data;
