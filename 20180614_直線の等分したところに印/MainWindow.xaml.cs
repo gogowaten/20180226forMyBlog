@@ -73,7 +73,8 @@ namespace _20180614_直線の等分したところに印
                 //角度の計算と表示
                 //GetPointAtFractionLengthで得られたタンジェントをMath.Atan2に入れると
                 //ラジアンが得られるので、Math.PI*180で角度に変換
-                var kakudo = Math.Atan2(pt.X, pt.Y) / Math.PI * 180;
+                //var kakudo = Math.Atan2(pt.X, pt.Y) / Math.PI * 180;
+                var kakudo = Math.Atan2(pt.Y, pt.X) / Math.PI * 180;
                 Label label = new Label();
                 label.Content = kakudo;
                 Canvas.SetTop(label, p.Y);
