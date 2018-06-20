@@ -1,0 +1,19 @@
+﻿<Window x:Class="_20180615_直線に矢印2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20180615_直線に矢印2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+  <Grid>
+    <Canvas Name="MyCanvas" Background="Transparent">
+      <Polyline Name="MyPolyline" Stroke="ForestGreen" StrokeThickness="18" StrokeLineJoin="Round"/>
+      <Polygon Name="ArrowHead" Fill="ForestGreen" Points="20,0 40,40 0,40"/>
+      <!--<Polygon Name="ArrowHead" Fill="ForestGreen" FillRule="Nonzero"
+               Points="40,0 75,70 0,25 80,25 15,70"/>-->
+      <!--<Ellipse Name="ArrowHead" Fill="ForestGreen" Width="40" Height="40"/>-->
+      <Label Name="MyLabel"/>
+    </Canvas>
+  </Grid>
+</Window>
