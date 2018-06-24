@@ -115,7 +115,6 @@ namespace _20180624_Canvasにマウスで手描き風
             MyPolyline = new Polyline();
             MyPolyline.Stroke = Brushes.Blue;
             MyPolyline.StrokeThickness = 20;
-            MyCanvas.
             MyPolyline.StrokeLineJoin = PenLineJoin.Round;
             MyListPolyline.Add(MyPolyline);
             MyCanvas.Children.Add(MyPolyline);
