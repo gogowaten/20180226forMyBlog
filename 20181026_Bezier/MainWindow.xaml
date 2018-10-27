@@ -1,0 +1,23 @@
+﻿<Window x:Class="_20181026_Bezier.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20181026_Bezier"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="500">
+    <Grid>
+    <StackPanel Margin="0,40,0,0">
+      <Button Name="ButtonRandomPoint" Content="ランダムアンカー点"/>
+      <Button Name="ButtonA0" HorizontalContentAlignment="Left" Content="A0：距離0(直線)"/>
+      <Button Name="ButtonA1" HorizontalContentAlignment="Left" Content="A1：前後アンカー点距離に比例(0.3倍)"/>
+      <Button Name="ButtonA2" HorizontalContentAlignment="Left" Content="A2：前後アンカー点距離それぞれに比例(0.3倍)、これだけ長さが非対称になる"/>
+      <Button Name="ButtonA3" HorizontalContentAlignment="Left" Content="A3：前後アンカー点距離の短いほうに合わせる(0.3倍)"/>
+      <Button Name="ButtonB1" HorizontalContentAlignment="Left" Content="B1：指定距離25"/>
+      <Button Name="ButtonB2" HorizontalContentAlignment="Left" Content="B2：指定距離、すべてのアンカー間距離の平均*0.3に指定"/>
+    </StackPanel>
+    <Canvas Name="MyCanvas">
+      
+    </Canvas>
+    </Grid>
+</Window>
