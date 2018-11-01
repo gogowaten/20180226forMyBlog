@@ -1,0 +1,28 @@
+﻿<Window x:Class="_20181029_ベジェ曲線_直角方向線.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20181029_ベジェ曲線_直角方向線"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="500">
+  <Grid>
+    <StackPanel Margin="0,20,0,0">
+      <Button Name="ButtonRandomPoint" Content="ランダムアンカー点"/>
+      <Border Height="20"/>
+      <Button Name="ButtonVisible" Content="頂点と方向線表示切り替え"/>
+      <Button Name="ButtonA0" HorizontalContentAlignment="Left" Content="A0：方向線距離(長さ)0は直線"/>
+      <Button Name="ButtonA1" HorizontalContentAlignment="Left" Content="A1：前後アンカー点間距離の0.3倍"/>
+      <Border Height="20"/>
+      <Button Name="ButtonC1" HorizontalContentAlignment="Left" Content="C1：前後アンカー点距離平均の0.3倍"/>
+      <Button Name="ButtonC2" HorizontalContentAlignment="Left" Content="C2：前後アンカー点距離それぞれの0.3倍、長さが前後非対称になる"/>
+      <Button Name="ButtonC3" HorizontalContentAlignment="Left" Content="C3：前後アンカー点距離の短いほうの0.3倍"/>
+      <Button Name="ButtonC4" HorizontalContentAlignment="Left" Content="C4：前後アンカー点間距離の0.3倍"/>
+      <Button Name="ButtonC5" HorizontalContentAlignment="Left" Content="C5：前後アンカー点距離の短いほうの0.5倍"/>
+    </StackPanel>
+    <Canvas Name="MyCanvas">
+
+    </Canvas>
+
+  </Grid>
+</Window>
