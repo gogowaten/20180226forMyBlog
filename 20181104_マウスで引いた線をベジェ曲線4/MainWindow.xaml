@@ -1,0 +1,37 @@
+﻿<Window x:Class="_20181104_マウスで引いた線をベジェ曲線4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20181104_マウスで引いた線をベジェ曲線4"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="550">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition Width="100"/>
+    </Grid.ColumnDefinitions>
+    <Canvas Name="MyCanvas" Background="Transparent" Focusable="True">
+
+    </Canvas>
+    <StackPanel Grid.Column="1" Background="Beige">
+      <Button Name="ButtonToClipboard" Content="画像としてコピー"/>
+      <Button Name="ButtonClear" Content="クリア"/>      
+      <TextBlock Text="{Binding ElementName=SliderInterval, Path=Value, StringFormat=間隔 \= 00}"
+                 Width="70" TextAlignment="Right"/>
+      <Slider Name="SliderInterval" Minimum="1" Maximum="100" Width="100" Value="10"
+              TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
+      <TextBlock Text="{Binding ElementName=SliderCurve, Path=Value, StringFormat=曲げ具合 \= 0.0}"
+                 Width="100" TextAlignment="Center"/>
+      <Slider Name="SliderCurve" Minimum="0.0" Maximum="1.0" Width="100" Value="0.3" SmallChange="0.1"
+              TickFrequency="0.1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
+            
+      <CheckBox Name="CheckBoxVisible" IsChecked="False" Content="表示"/>
+      <TextBlock Margin="0,10,0,0" Text="方向線角度の決め方"/>
+      <ComboBox Name="ComboBoxRadianType"/>
+      <TextBlock Margin="0,10,0,0" Text="方向線長さの決め方"/>
+      <ComboBox Name="ComboBoxDistanceType"/>
+      <Button Name="ButtonTest" Content="test"/>
+    </StackPanel>
+  </Grid>
+</Window>
