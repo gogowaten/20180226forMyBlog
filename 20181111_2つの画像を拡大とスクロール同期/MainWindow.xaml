@@ -1,0 +1,48 @@
+﻿<Window x:Class="_20181111_2つの画像を拡大とスクロール同期.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_20181111_2つの画像を拡大とスクロール同期"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="540">
+  <Grid Margin="0 10 0 0">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="20"/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    
+    <StackPanel Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" Grid.RowSpan="1"
+                Orientation="Horizontal">
+      <TextBlock Text="{Binding ElementName=SliderScale, Path=Value, StringFormat=表示倍率 : 0}" Margin="10 0"/>
+      <Slider Name="SliderScale" Value="1.0" Minimum="1.0" Maximum="5.0" SmallChange="1.0" LargeChange="1.0"
+              IsMoveToPointEnabled="False" IsSnapToTickEnabled="True"
+              Width="100"/>
+      <TextBlock Text="{Binding ElementName=MyCanvas1, Path=Width, StringFormat=横 : 0}" Margin="10 0"/>
+      <TextBlock Text="{Binding ElementName=MyCanvas1, Path=Height, StringFormat=縦 : 0}" Margin="10 0"/>
+
+      <TextBlock Text="{Binding ElementName=MyScroll1,Path=VerticalOffset,StringFormat= vOffset \= 0}" Margin="10,0"/>
+      <TextBlock Text="{Binding ElementName=MyScroll1,Path=ScrollableHeight,StringFormat= height \= 0}" Margin="10,0"/>
+      <TextBlock Name="MyText"/>
+    </StackPanel>
+
+    <ScrollViewer Name="MyScroll1" Grid.Column="0" Grid.Row="1"
+                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Canvas Name="MyCanvas1">
+        <Image Name="MyImage1" Stretch="None"/>
+      </Canvas>
+    </ScrollViewer>
+    
+    <ScrollViewer Name="MyScroll2" Grid.Column="1" Grid.Row="1"
+                  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+      <Canvas Name="MyCanvas2">
+        <Image Name="MyImage2" Stretch="None"/>
+      </Canvas>
+    </ScrollViewer>
+    
+  </Grid>
+</Window>
