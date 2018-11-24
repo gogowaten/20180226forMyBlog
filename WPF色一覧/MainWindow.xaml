@@ -1,0 +1,34 @@
+﻿<Window x:Class="WPF色一覧.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF色一覧"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="1000">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="auto"/>
+      <ColumnDefinition MinWidth="100"/>
+    </Grid.ColumnDefinitions>
+
+    <WrapPanel Grid.Column="0" Name="MyWrapPanel" Orientation="Vertical"/>
+    <StackPanel Grid.Column="1">
+      <Button Content="色相" Name="ButtonHue"/>
+      <Button Content="彩度" Name="ButtonSaturation"/>
+      <Button Content="明度" Name="ButtonValue"/>
+      <Button Content="輝度" Name="ButtonBrightness"/>
+      <Button Content="名前" Name="ButtonName"/>
+      <CheckBox Name="CheckBoxVisible" Content="色名表示する" IsChecked="True"/>
+      <TextBlock Name="TextBlockColorName"/>
+      <TextBlock Name="TextBlockColor"/>
+      <TextBlock Name="TextBlockRGB"/>
+      <TextBlock Name="TextBlockHexadecimal"/>
+      <TextBlock Name="TextBlockHue"/>
+      <TextBlock Name="TextBlockSaturation"/>
+      <TextBlock Name="TextBlockValue"/>
+      <TextBlock Name="TextBlockbrightness"/>
+      <TextBlock Name="TextBlockBackAndForeColor" FontSize="30"/>
+    </StackPanel>
+  </Grid>
+</Window>
