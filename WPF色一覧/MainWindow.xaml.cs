@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 
 using MyHSV;
 using System.Reflection;
+//WPF色一覧表示してHSVで並べ替えするアプリできた ( ソフトウェア ) - 午後わてんのブログ - Yahoo!ブログ
+//https://blogs.yahoo.co.jp/gogowaten/15766408.html
 
 namespace WPF色一覧
 {
